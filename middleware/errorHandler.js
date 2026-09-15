@@ -17,7 +17,10 @@ const errorHandler = (error, req, res, next) => {
     message = 'Invalid contact ID';
   } else if (error.code === 11000) {
     statusCode = 409;
-    message = 'A contact enquiry with these details already exists';
+    const field = Object.keys(error.keyValue || {})[0];
+    message = field === 'email'
+      ? 'An account with this email already exists'
+      : 'A record with these details already exists';
   }
 
   if (process.env.NODE_ENV !== 'production') {
